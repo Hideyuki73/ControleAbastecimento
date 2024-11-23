@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "controle_combustivel"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "controle_combustivel-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
