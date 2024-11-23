@@ -1,22 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nicknameController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> _login() async {
+  Future<void> _register() async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+      User? user = userCredential.user;
+      await user?.updateDisplayName(_nicknameController.text);
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       print(e);
@@ -27,9 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Registrar'),
         backgroundColor: Color(0xFF4A148C),
-        foregroundColor: Colors.white, // Definindo a cor do texto como branco
+        foregroundColor: Colors.white,
       ),
       body: Container(
         color: Color(0xFF2E2E2E),
@@ -38,17 +41,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _buildTextField(_nicknameController, 'Nickname'),
               _buildTextField(_emailController, 'Email'),
               _buildTextField(_passwordController, 'Password', obscureText: true),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _login,
+                onPressed: _register,
                 style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
-                child: Text('Login', style: TextStyle(color: Colors.white)),
+                child: Text('Registrar', style: TextStyle(color: Colors.white)),
               ),
               TextButton(
-                onPressed: () => Navigator.pushNamed(context, '/register'),
-                child: Text('Registrar', style: TextStyle(color: Colors.white)),
+                onPressed: () => Navigator.pushNamed(context, '/'),
+                child: Text('Já tem uma conta? Login', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

@@ -13,14 +13,14 @@ class NovoAbastecimentoScreen extends StatefulWidget {
 class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
   final _litrosController = TextEditingController();
   final _quilometragemController = TextEditingController();
-  final _dataController = TextEditingController();
 
   Future<void> _registrarAbastecimento() async {
+    DateTime now = DateTime.now();  // Obtendo a data e hora atuais
     await FirebaseFirestore.instance.collection('abastecimentos').add({
       'veiculoId': widget.veiculoId,
       'litros': double.parse(_litrosController.text),
       'quilometragem': double.parse(_quilometragemController.text),
-      'data': DateTime.parse(_dataController.text),
+      'data': now,  // Usando a data e hora atuais
     });
     Navigator.pop(context);
   }
@@ -31,34 +31,50 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
       appBar: AppBar(
         title: Text('Novo Abastecimento'),
         foregroundColor: Colors.white,
-        backgroundColor: Color(0xFF4A148C)
+        backgroundColor: Color(0xFF4A148C),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _litrosController,
-              decoration: InputDecoration(labelText: 'Litros'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: _quilometragemController,
-              decoration: InputDecoration(labelText: 'Quilometragem'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: _dataController,
-              decoration: InputDecoration(labelText: 'Data'),
-              keyboardType: TextInputType.datetime,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _registrarAbastecimento,
-              child: Text('Registrar'),
-            ),
-          ],
+      body: Container(
+        color: Color(0xFF2E2E2E),  // Definindo o background cinza escuro
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildTextField(_litrosController, 'Litros'),
+              _buildTextField(_quilometragemController, 'Quilometragem'),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _registrarAbastecimento,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF4A148C),
+                ),
+                child: Text('Registrar', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Color(0xFF4A148C).withOpacity(0.2),
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF4A148C)),
+          ),
+        ),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

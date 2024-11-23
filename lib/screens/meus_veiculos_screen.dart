@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:controle_combustivel/screens/novo_abastecimento_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,17 @@ class MeusVeiculosScreen extends StatelessWidget {
                   subtitle: Text(
                     '${veiculo['modelo']} - ${veiculo['ano']}',
                     style: TextStyle(color: Colors.white70),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.local_gas_station, color: Colors.white),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NovoAbastecimentoScreen(veiculoId: veiculo.id),
+                        ),
+                      );
+                    },
                   ),
                 ),
               );

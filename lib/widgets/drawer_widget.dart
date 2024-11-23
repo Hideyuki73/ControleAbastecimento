@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Nome do Usuário'),
-            accountEmail: Text('email@exemplo.com'),
+            accountName: Text(user?.displayName ?? 'Nome do Usuário', style: TextStyle(color: Colors.white)),
+            accountEmail: Text(user?.email ?? 'email@exemplo.com', style: TextStyle(color: Colors.white)),
+            decoration: BoxDecoration(
+              color: Color(0xFF4A148C),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.home),
@@ -47,6 +52,7 @@ class MyDrawer extends StatelessWidget {
           ),
         ],
       ),
+      backgroundColor: Color(0xFF2E2E2E),
     );
   }
 }
