@@ -19,32 +19,44 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
+            iconColor: Color(0xFF4A148C),
             title: Text('Home'),
+            textColor: Colors.white,
             onTap: () => Navigator.pushNamed(context, '/home'),
           ),
           ListTile(
             leading: Icon(Icons.car_rental),
+            iconColor: Color(0xFF4A148C),
             title: Text('Meus Veículos'),
+            textColor: Colors.white,
             onTap: () => Navigator.pushNamed(context, '/meus_veiculos'),
           ),
           ListTile(
             leading: Icon(Icons.add),
+            iconColor: Color(0xFF4A148C),
             title: Text('Adicionar Veículo'),
+            textColor: Colors.white,
             onTap: () => Navigator.pushNamed(context, '/adicionar_veiculo'),
           ),
           ListTile(
             leading: Icon(Icons.history),
+            iconColor: Color(0xFF4A148C),
             title: Text('Histórico de Abastecimentos'),
+            textColor: Colors.white,
             onTap: () => Navigator.pushNamed(context, '/historico_abastecimentos'),
           ),
           ListTile(
             leading: Icon(Icons.person),
+            iconColor: Color(0xFF4A148C),
             title: Text('Perfil'),
+            textColor: Colors.white,
             onTap: () => Navigator.pushNamed(context, '/perfil'),
           ),
           ListTile(
             leading: Icon(Icons.logout),
+            iconColor: Color.fromARGB(255, 209, 8, 8),
             title: Text('Logout'),
+            textColor: Colors.white,
             onTap: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.pushReplacementNamed(context, '/');

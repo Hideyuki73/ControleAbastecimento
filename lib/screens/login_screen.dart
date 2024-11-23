@@ -41,15 +41,21 @@ class _LoginScreenState extends State<LoginScreen> {
               _buildTextField(_emailController, 'Email'),
               _buildTextField(_passwordController, 'Password', obscureText: true),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
-                child: Text('Login', style: TextStyle(color: Colors.white)),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pushNamed(context, '/register'),
-                child: Text('Registrar', style: TextStyle(color: Colors.white)),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _login,
+                    style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
+                    child: Text('Login', style: TextStyle(color: Colors.white)),
+                  ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/register'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
+                  child: Text('Register', style: TextStyle(color: Colors.white)),
+                ),
+                ],
+              )
             ],
           ),
         ),

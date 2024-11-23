@@ -4,6 +4,7 @@ import 'package:controle_combustivel/screens/home_screen.dart';
 import 'package:controle_combustivel/screens/login_screen.dart';
 import 'package:controle_combustivel/screens/meus_veiculos_screen.dart';
 import 'package:controle_combustivel/screens/perfil_screen.dart';
+import 'package:controle_combustivel/screens/register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/adicionar_veiculo': (context) => AdicionarVeiculoScreen(),
         '/historico_abastecimentos': (context) => HistoricoAbastecimentosScreen(),
         '/perfil': (context) => PerfilScreen(),
+        '/register': (context) => RegisterScreen()
       },
     );
   }
