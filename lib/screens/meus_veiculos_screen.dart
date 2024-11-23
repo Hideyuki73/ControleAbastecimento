@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'novo_abastecimento_screen.dart';
+import 'editar_veiculo_screen.dart';
 
 class MeusVeiculosScreen extends StatelessWidget {
   @override
@@ -49,6 +50,20 @@ class MeusVeiculosScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => NovoAbastecimentoScreen(veiculoId: veiculo.id),
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.white),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditarVeiculoScreen(
+                                  veiculoId: veiculo.id,
+                                  existingData: veiculo.data() as Map<String, dynamic>,
+                                ),
                               ),
                             );
                           },

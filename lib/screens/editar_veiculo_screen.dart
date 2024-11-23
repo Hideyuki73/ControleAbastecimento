@@ -1,20 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AdicionarVeiculoScreen extends StatefulWidget {
+class EditarVeiculoScreen extends StatefulWidget {
+  final String veiculoId;
+  final Map<String, dynamic> existingData;
+
+  EditarVeiculoScreen({required this.veiculoId, required this.existingData});
+
   @override
-  _AdicionarVeiculoScreenState createState() => _AdicionarVeiculoScreenState();
+  _EditarVeiculoScreenState createState() => _EditarVeiculoScreenState();
 }
 
-class _AdicionarVeiculoScreenState extends State<AdicionarVeiculoScreen> {
+class _EditarVeiculoScreenState extends State<EditarVeiculoScreen> {
   final _nomeController = TextEditingController();
   final _modeloController = TextEditingController();
   final _anoController = TextEditingController();
   final _placaController = TextEditingController();
   String _errorMessage = '';
 
-  Future<void> _adicionarVeiculo() async {
+  @override
+  void initState() {
+    super.initState();
+    _nomeController.text = widget.existingData['nome'];
+    _modeloController.text = widget.existingData['modelo'];
+    _anoController.text = widget.existingData['ano'].toString();
+    _placaController.text = widget.existingData['placa'];
+  }
+
+  Future<void> _editarVeiculo() async {
     if (!_anoValido(_anoController.text)) {
       setState(() {
         _errorMessage = 'Ano inválido. Por favor, insira um ano entre 1886 e ${DateTime.now().year}.';
@@ -23,17 +36,16 @@ class _AdicionarVeiculoScreenState extends State<AdicionarVeiculoScreen> {
     }
 
     try {
-      await FirebaseFirestore.instance.collection('veiculos').add({
+      await FirebaseFirestore.instance.collection('veiculos').doc(widget.veiculoId).update({
         'nome': _nomeController.text,
         'modelo': _modeloController.text,
         'ano': int.parse(_anoController.text),
         'placa': _placaController.text,
-        'userId': FirebaseAuth.instance.currentUser!.uid,
       });
       Navigator.pop(context);
     } catch (e) {
       setState(() {
-        _errorMessage = 'Erro ao adicionar veículo: ${e.toString()}';
+        _errorMessage = 'Erro ao editar veículo: ${e.toString()}';
       });
     }
   }
@@ -47,7 +59,7 @@ class _AdicionarVeiculoScreenState extends State<AdicionarVeiculoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adicionar Veículo'),
+        title: Text('Editar Veículo'),
         backgroundColor: Color(0xFF4A148C),
         foregroundColor: Colors.white,
       ),
@@ -71,11 +83,11 @@ class _AdicionarVeiculoScreenState extends State<AdicionarVeiculoScreen> {
                 ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _adicionarVeiculo,
+                onPressed: _editarVeiculo,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF4A148C),
                 ),
-                child: Text('Adicionar', style: TextStyle(color: Colors.white)),
+                child: Text('Salvar', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

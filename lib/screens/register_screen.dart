@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, library_private_types_in_public_api, use_key_in_widget_constructors
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +11,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _nicknameController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String _errorMessage = '';
 
   Future<void> _register() async {
     try {
@@ -24,7 +23,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await user?.updateDisplayName(_nicknameController.text);
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
-      print(e);
+      setState(() {
+        _errorMessage = 'Erro ao registrar: ${e}';
+      });
     }
   }
 
@@ -45,7 +46,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               _buildTextField(_nicknameController, 'Nickname'),
               _buildTextField(_emailController, 'Email'),
-              _buildTextField(_passwordController, 'Password', obscureText: true),
+              _buildTextField(_passwordController, 'Senha', obscureText: true),
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _register,

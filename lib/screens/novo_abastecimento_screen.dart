@@ -7,11 +7,7 @@ class NovoAbastecimentoScreen extends StatefulWidget {
   final String? abastecimentoId;
   final Map<String, dynamic>? existingData;
 
-  NovoAbastecimentoScreen({
-    required this.veiculoId,
-    this.abastecimentoId,
-    this.existingData,
-  });
+  NovoAbastecimentoScreen({required this.veiculoId, this.abastecimentoId, this.existingData});
 
   @override
   _NovoAbastecimentoScreenState createState() => _NovoAbastecimentoScreenState();
@@ -20,6 +16,7 @@ class NovoAbastecimentoScreen extends StatefulWidget {
 class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
   final _litrosController = TextEditingController();
   final _quilometragemController = TextEditingController();
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -31,6 +28,10 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
   }
 
   Future<void> _registrarAbastecimento() async {
+    if (!_validaCampos()) {
+      return;
+    }
+
     DateTime now = DateTime.now();
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -51,6 +52,24 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
     Navigator.pop(context);
   }
 
+  bool _validaCampos() {
+    if (_litrosController.text.isEmpty || _quilometragemController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Por favor, preencha todos os campos.';
+      });
+      return false;
+    }
+
+    if (double.tryParse(_litrosController.text) == null || double.tryParse(_quilometragemController.text) == null) {
+      setState(() {
+        _errorMessage = 'Por favor, insira apenas números válidos.';
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,8 +84,16 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _buildTextField(_litrosController, 'Litros'),
-              _buildTextField(_quilometragemController, 'Quilometragem'),
+              _buildTextField(_litrosController, 'Litros', keyboardType: TextInputType.number),
+              _buildTextField(_quilometragemController, 'Quilometragem', keyboardType: TextInputType.number),
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _registrarAbastecimento,
@@ -82,7 +109,7 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label) {
+  Widget _buildTextField(TextEditingController controller, String label, {TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
@@ -101,6 +128,7 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
           ),
         ),
         style: TextStyle(color: Colors.white),
+        keyboardType: keyboardType,
       ),
     );
   }

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, library_private_types_in_public_api, use_key_in_widget_constructors
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +10,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String _errorMessage = '';
 
   Future<void> _login() async {
     try {
@@ -21,7 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
-      print(e);
+      setState(() {
+        _errorMessage = 'Erro ao fazer login: ${e}';
+      });
     }
   }
 
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text('Login'),
         backgroundColor: Color(0xFF4A148C),
-        foregroundColor: Colors.white, // Definindo a cor do texto como branco
+        foregroundColor: Colors.white,
       ),
       body: Container(
         color: Color(0xFF2E2E2E),
@@ -41,23 +42,25 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildTextField(_emailController, 'Email'),
-              _buildTextField(_passwordController, 'Password', obscureText: true),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
-                    child: Text('Login', style: TextStyle(color: Colors.white)),
+              _buildTextField(_passwordController, 'Senha', obscureText: true),
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red),
                   ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/register'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
-                  child: Text('Register', style: TextStyle(color: Colors.white)),
                 ),
-                ],
-              )
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
+                child: Text('Login', style: TextStyle(color: Colors.white)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(context, '/register'),
+                child: Text('Não tem uma conta? Registre-se aqui!', style: TextStyle(color: Colors.white)),
+              ),
             ],
           ),
         ),
