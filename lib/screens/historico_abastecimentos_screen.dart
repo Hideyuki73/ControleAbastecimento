@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'novo_abastecimento_screen.dart';
 
 class HistoricoAbastecimentosScreen extends StatelessWidget {
   @override
@@ -54,15 +55,19 @@ class HistoricoAbastecimentosScreen extends StatelessWidget {
                     var veiculoData = veiculoSnapshot.data!.data() as Map<String, dynamic>;
                     String veiculoNome = veiculoData['nome'];
 
-                    // Calcular média de km/l
+                    // Calcular média de km/l corretamente
+                    List<DocumentSnapshot> abastecimentos = abastecimentosPorVeiculo[veiculoId]!;
+                    abastecimentos.sort((a, b) => a['data'].compareTo(b['data']));
+
                     double totalKm = 0;
                     double totalLitros = 0;
-                    for (var doc in abastecimentosPorVeiculo[veiculoId]!) {
-                      var data = doc.data() as Map<String, dynamic>;
-                      totalKm += data['quilometragem'];
-                      totalLitros += data['litros'];
+                    for (int i = 1; i < abastecimentos.length; i++) {
+                      var current = abastecimentos[i].data() as Map<String, dynamic>;
+                      var previous = abastecimentos[i - 1].data() as Map<String, dynamic>;
+                      totalKm += current['quilometragem'] - previous['quilometragem'];
+                      totalLitros += current['litros'];
                     }
-                    double mediaKmPorLitro = totalKm / totalLitros;
+                    double mediaKmPorLitro = totalLitros > 0 ? totalKm / totalLitros : 0;
 
                     return Column(
                       children: [
@@ -70,7 +75,7 @@ class HistoricoAbastecimentosScreen extends StatelessWidget {
                           color: Color(0xFF4A148C).withOpacity(0.5),
                           child: ExpansionTile(
                             title: Text(veiculoNome, style: TextStyle(color: Colors.white)),
-                            children: abastecimentosPorVeiculo[veiculoId]!.map((abastecimentoDoc) {
+                            children: abastecimentos.map((abastecimentoDoc) {
                               var abastecimentoData = abastecimentoDoc.data() as Map<String, dynamic>;
                               return Card(
                                 color: Color(0xFF4A148C).withOpacity(0.2),
@@ -82,6 +87,32 @@ class HistoricoAbastecimentosScreen extends StatelessWidget {
                                   subtitle: Text(
                                     'Litros: ${abastecimentoData['litros']} - Quilometragem: ${abastecimentoData['quilometragem']}',
                                     style: TextStyle(color: Colors.white70),
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.edit, color: Colors.white),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => NovoAbastecimentoScreen(
+                                                veiculoId: veiculoId,
+                                                abastecimentoId: abastecimentoDoc.id,
+                                                existingData: abastecimentoData,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.delete, color: Colors.white),
+                                        onPressed: () async {
+                                          await FirebaseFirestore.instance.collection('abastecimentos').doc(abastecimentoDoc.id).delete();
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );

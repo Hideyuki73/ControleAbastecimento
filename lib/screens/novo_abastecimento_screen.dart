@@ -1,11 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class NovoAbastecimentoScreen extends StatefulWidget {
   final String veiculoId;
+  final String? abastecimentoId;
+  final Map<String, dynamic>? existingData;
 
-  NovoAbastecimentoScreen({required this.veiculoId});
+  NovoAbastecimentoScreen({
+    required this.veiculoId,
+    this.abastecimentoId,
+    this.existingData,
+  });
 
   @override
   _NovoAbastecimentoScreenState createState() => _NovoAbastecimentoScreenState();
@@ -15,17 +21,32 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
   final _litrosController = TextEditingController();
   final _quilometragemController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingData != null) {
+      _litrosController.text = widget.existingData!['litros'].toString();
+      _quilometragemController.text = widget.existingData!['quilometragem'].toString();
+    }
+  }
+
   Future<void> _registrarAbastecimento() async {
     DateTime now = DateTime.now();
-    String userId = FirebaseAuth.instance.currentUser!.uid;  // Obtendo o userId do usuário logado
+    String userId = FirebaseAuth.instance.currentUser!.uid;
 
-    await FirebaseFirestore.instance.collection('abastecimentos').add({
-      'userId': userId,  // Ligando o abastecimento ao usuário logado
+    var abastecimentoData = {
+      'userId': userId,
       'veiculoId': widget.veiculoId,
       'litros': double.parse(_litrosController.text),
       'quilometragem': double.parse(_quilometragemController.text),
-      'data': now,  // Usando a data e hora atuais
-    });
+      'data': now,
+    };
+
+    if (widget.abastecimentoId == null) {
+      await FirebaseFirestore.instance.collection('abastecimentos').add(abastecimentoData);
+    } else {
+      await FirebaseFirestore.instance.collection('abastecimentos').doc(widget.abastecimentoId).update(abastecimentoData);
+    }
 
     Navigator.pop(context);
   }
@@ -34,12 +55,12 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Novo Abastecimento'),
+        title: Text(widget.abastecimentoId == null ? 'Novo Abastecimento' : 'Editar Abastecimento'),
         backgroundColor: Color(0xFF4A148C),
         foregroundColor: Colors.white,
       ),
       body: Container(
-        color: Color(0xFF2E2E2E),  // Definindo o background cinza escuro
+        color: Color(0xFF2E2E2E),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -52,7 +73,7 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF4A148C),
                 ),
-                child: Text('Registrar', style: TextStyle(color: Colors.white)),
+                child: Text(widget.abastecimentoId == null ? 'Registrar' : 'Salvar', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
