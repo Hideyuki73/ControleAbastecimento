@@ -1,3 +1,9 @@
+import 'package:controle_combustivel/screens/adicionar_veiculo_screen.dart';
+import 'package:controle_combustivel/screens/historico_abastecimentos_screen.dart';
+import 'package:controle_combustivel/screens/home_screen.dart';
+import 'package:controle_combustivel/screens/login_screen.dart';
+import 'package:controle_combustivel/screens/meus_veiculos_screen.dart';
+import 'package:controle_combustivel/screens/perfil_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';

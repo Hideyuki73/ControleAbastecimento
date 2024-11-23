@@ -7,6 +7,8 @@ class HistoricoAbastecimentosScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Histórico de Abastecimentos'),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF4A148C),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('abastecimentos').snapshots(),
@@ -17,14 +19,24 @@ class HistoricoAbastecimentosScreen extends StatelessWidget {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               var abastecimento = snapshot.data!.docs[index];
-              return ListTile(
-                title: Text('Data: ${abastecimento['data']}'),
-                subtitle: Text('Litros: ${abastecimento['litros']} - Quilometragem: ${abastecimento['quilometragem']}'),
+              return Card(
+                color: Color(0xFF4A148C).withOpacity(0.2),
+                child: ListTile(
+                  title: Text(
+                    'Data: ${abastecimento['data']}',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    'Litros: ${abastecimento['litros']} - Quilometragem: ${abastecimento['quilometragem']}',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
               );
             },
           );
         },
       ),
+      backgroundColor: Color(0xFF2E2E2E),
     );
   }
 }

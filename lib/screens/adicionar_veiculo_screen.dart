@@ -29,34 +29,51 @@ class _AdicionarVeiculoScreenState extends State<AdicionarVeiculoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Adicionar Veículo'),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF4A148C),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: _nomeController,
-              decoration: InputDecoration(labelText: 'Nome'),
-            ),
-            TextField(
-              controller: _modeloController,
-              decoration: InputDecoration(labelText: 'Modelo'),
-            ),
-            TextField(
-              controller: _anoController,
-              decoration: InputDecoration(labelText: 'Ano'),
-            ),
-            TextField(
-              controller: _placaController,
-              decoration: InputDecoration(labelText: 'Placa'),
-            ),
+            _buildTextField(_nomeController, 'Nome'),
+            _buildTextField(_modeloController, 'Modelo'),
+            _buildTextField(_anoController, 'Ano'),
+            _buildTextField(_placaController, 'Placa'),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _adicionarVeiculo,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A148C),
+              ),
               child: Text('Adicionar'),
             ),
           ],
         ),
+      ),
+      backgroundColor: Color(0xFF2E2E2E),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Color(0xFF4A148C).withOpacity(0.2),
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF4A148C)),
+          ),
+        ),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

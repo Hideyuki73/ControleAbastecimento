@@ -49,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF4A148C),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -68,37 +70,40 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               'Bem-vindo ao Controle de Abastecimento!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(height: 20),
             if (user != null)
               Column(
                 children: [
                   Card(
+                    color: Color(0xFF4A148C).withOpacity(0.2),
                     elevation: 4,
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text('Usuário logado'),
-                      subtitle: Text(user!.email ?? ''),
+                      leading: Icon(Icons.person, color: Colors.white),
+                      title: Text('Usuário logado', style: TextStyle(color: Colors.white)),
+                      subtitle: Text(user!.email ?? '', style: TextStyle(color: Colors.white70)),
                     ),
                   ),
                   Card(
+                    color: Color(0xFF4A148C).withOpacity(0.2),
                     elevation: 4,
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
-                      leading: Icon(Icons.car_rental),
-                      title: Text('Total de Veículos'),
-                      subtitle: Text('$vehicleCount'),
+                      leading: Icon(Icons.car_rental, color: Colors.white),
+                      title: Text('Total de Veículos', style: TextStyle(color: Colors.white)),
+                      subtitle: Text('$vehicleCount', style: TextStyle(color: Colors.white70)),
                     ),
                   ),
                   Card(
+                    color: Color(0xFF4A148C).withOpacity(0.2),
                     elevation: 4,
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
-                      leading: Icon(Icons.local_gas_station),
-                      title: Text('Abastecimentos Recentes'),
-                      subtitle: Text('$recentRefuels'),
+                      leading: Icon(Icons.local_gas_station, color: Colors.white),
+                      title: Text('Abastecimentos Recentes', style: TextStyle(color: Colors.white)),
+                      subtitle: Text('$recentRefuels', style: TextStyle(color: Colors.white70)),
                     ),
                   ),
                 ],
@@ -106,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      backgroundColor: Color(0xFF2E2E2E),
     );
   }
 }

@@ -30,6 +30,8 @@ class _NovoAbastecimentoScreenState extends State<NovoAbastecimentoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Novo Abastecimento'),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF4A148C)
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

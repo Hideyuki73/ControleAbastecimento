@@ -22,7 +22,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
     User? user = _auth.currentUser;
     if (user != null) {
       _emailController.text = user.email ?? '';
-      // Carregar nickname e senha se estiverem disponíveis no Firestore
     }
   }
 
@@ -47,31 +46,51 @@ class _PerfilScreenState extends State<PerfilScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Perfil'),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFF4A148C),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: _nicknameController,
-              decoration: InputDecoration(labelText: 'Nickname'),
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _senhaController,
-              decoration: InputDecoration(labelText: 'Senha'),
-              obscureText: true,
-            ),
+            _buildTextField(_nicknameController, 'Nickname'),
+            _buildTextField(_emailController, 'Email'),
+            _buildTextField(_senhaController, 'Senha', obscureText: true),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _updateUserProfile,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A148C),
+              ),
               child: Text('Atualizar Perfil'),
             ),
           ],
         ),
+      ),
+      backgroundColor: Color(0xFF2E2E2E),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Color(0xFF4A148C).withOpacity(0.2),
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF4A148C)),
+          ),
+        ),
+        style: TextStyle(color: Colors.white),
+        obscureText: obscureText,
       ),
     );
   }

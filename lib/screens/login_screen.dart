@@ -38,38 +38,56 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
+            _buildTextField(_emailController, 'Email'),
+            _buildTextField(_passwordController, 'Password', obscureText: true),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: _login,
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
                   child: Text('Login'),
                 ),
                 ElevatedButton(
                   onPressed: _register,
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF4A148C)),
                   child: Text('Register'),
                 ),
               ],
             ),
           ],
         ),
+      ),
+      backgroundColor: Color(0xFF2E2E2E),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Color(0xFF4A148C).withOpacity(0.2),
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF4A148C)),
+          ),
+        ),
+        style: TextStyle(color: Colors.white),
+        obscureText: obscureText,
       ),
     );
   }
